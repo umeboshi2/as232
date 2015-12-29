@@ -3,6 +3,11 @@ import sys, os
 
 version = '0.0'
 
+install_requires = [
+    'unipath',
+    ]
+
+
 setup(name='as232',
       version=version,
       description="python code to help manipulate git-annex",
@@ -17,9 +22,7 @@ python code to help manipulate git-annex""",
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
-      install_requires=[
-          # -*- Extra requirements: -*-
-      ],
+      install_requires=install_requires,
       entry_points="""
       # -*- Entry points: -*-
       """,
