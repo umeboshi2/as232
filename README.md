@@ -14,7 +14,7 @@ remote types: git gcrypt S3 bup directory rsync web bittorrent webdav tahoe glac
 ```
 
 It may be convenient to install git-annex from sid in a chroot.  The 
-[schroot](http://packages.debian.org/schoot) program is excellent for 
+[schroot](http://packages.debian.org/schroot) program is excellent for 
 doing this on a stable system.
 
 
