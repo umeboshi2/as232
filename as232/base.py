@@ -1,5 +1,7 @@
 import os
+import subprocess
 import contextlib
+
 
 @contextlib.contextmanager
 def working_directory(directory):
@@ -51,4 +53,16 @@ def remove_trailing_slash(pathname):
 def parse_config_lines(filename):
     return [line.strip() for line in file(filename)
             if line.strip() and not line.strip().startswith('#')]
+
+
+# FIXME, this is not useful
+def run_command(cmd):
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    if proc.returncode:
+        msg = "%s returned %d" % (' '.join(cmd), proc.returncode)
+        raise RuntimeError, msg
+    return proc
+
+def get_command_output(cmd):
+    return subprocess.check_output(cmd)
 
