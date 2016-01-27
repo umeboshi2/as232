@@ -24,7 +24,7 @@ from as232.alchemy import SerialBase, Base
 ## Data Types                     ##
 ####################################
 
-GitAnnexBackendType = Enum('SHA256', 'SHA256E',
+GitAnnexBackendType = Enum('SHA256', 'SHA256E', 'URL',
                            name='gitannex_backend_type_enum')
 
 ArchiveType = Enum('zip', 'rar', '7z',
