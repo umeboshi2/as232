@@ -22,6 +22,25 @@ zero_key_prefix = 'SHA256E-s0--e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca
 def make_key(kdict):
     return '%(method)s-s%(size)d--%(checksum)s' % kdict
 
+def make_relaxed_key(kdict):
+    return 'URL--%(checksum)s' % kdict
+
+RELAXED_KEY = {True: make_relaxed_key, False: make_key}
+
+def get_md5sum(key):
+    m = hashlib.md5()
+    m.update(key)
+    return m.hexdigest()
+
+def get_topdirs(md5sum):
+    return md5sum[:3], md5sum[3:6]
+
+def make_dirname(kdict, relaxed=False):
+    key = RELAXED_KEY[relaxed](kdict)
+    l1, l2 = get_topdirs(get_md5sum(key))
+    kfname = key.replace(':', '&c').replace('/', '%')
+    return os.path.join(l1, l2, kfname)
+    
 
 def make_old_default_key(size, checksum):
     return 'SHA256-s%d--%s' % (size, checksum)
@@ -30,11 +49,23 @@ def make_default_key(size, checksum, ext):
     return 'SHA256E-s%d--%s.%s' % (size, checksum, ext)
     
 def parse_key(keystring):
-    method, size, ignore, checksum = keystring.strip().split('-')
-    if not size.startswith('s'):
-        raise RuntimeError, "Bad size %s" % size
-    # strip string and create number for size
-    size = int(size[1:])
+    #method, size, ignore, checksum = keystring.strip().split('-')
+    prefix = keystring.split('--')[0]
+    if '-' in prefix:
+        method, size = prefix.split('-')
+    else:
+        method = prefix
+        size = None
+    prefix = '%s--' % prefix
+    split = keystring.strip().split(prefix)
+    if split[0] or len(split) != 2:
+        raise RuntimeError, 'bad split %s' % split
+    checksum = split[1]
+    if size is not None:
+        if not size.startswith('s'):
+            raise RuntimeError, "Bad size %s" % size
+        # strip string and create number for size
+        size = int(size[1:])
     return dict(method=method, size=size, checksum=checksum)
 
 def getkey(filepath):
@@ -61,7 +92,9 @@ def parse_repocopy(line):
 
 def make_whereis_proc(output=None):
     cmd = ['git-annex', 'whereis', '--json']
-    return subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    if output is None:
+        output = subprocess.PIPE
+    return subprocess.Popen(cmd, stdout=output)
 
 def make_find_proc(output=None,allrepos=True, inrepos=[]):
     cmd = ['git-annex', 'find', '--json']
