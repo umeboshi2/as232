@@ -53,6 +53,21 @@ class TimeStampMixin(SerialBase):
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now())
     
+
+class AnnexKeyMixin(SerialBase):
+    @property
+    def dirname_lower(self):
+        return os.path.join(self.hashdirlower, self.key)
+    @property
+    def filename_lower(self):
+        return os.path.join(self.hashdirlower, self.key, self.key)
+    @property
+    def dirname_mixed(self):
+        return os.path.join(self.hashdirmixed, self.key)
+    @property
+    def filename_mixed(self):
+        return os.path.join(self.hashdirmixed, self.key, self.key)
+    
     
 def _make_db_session(dburl, create_all=False, baseclass=None):
     settings = {'sqlalchemy.url' : dburl}
