@@ -78,8 +78,10 @@ def _make_db_session(dburl, create_all=False, baseclass=None):
     session_class.configure(bind=engine)
     return session_class
 
-def make_sqlite_session(filename, create_all=False, baseclass=None):
-    dburl = "sqlite:///%s" % filename
+def make_sqlite_session(filename=None, create_all=False, baseclass=None):
+    dburl = "sqlite://"
+    if filename is not None:
+        dburl = "sqlite:///%s" % filename
     return _make_db_session(dburl, create_all=create_all,
                             baseclass=baseclass)
 
