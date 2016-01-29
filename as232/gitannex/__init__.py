@@ -98,9 +98,11 @@ def make_whereis_proc(output=None):
 
 def make_find_proc(output=None,allrepos=True, inrepos=[]):
     cmd = ['git-annex', 'find', '--json']
+    if output is None:
+        output = subprocess.PIPE
     if allrepos:
         cmd += ['--include', '*']
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        proc = subprocess.Popen(cmd, stdout=output)
         proc._cmd_list = cmd
         return proc
     if len(inrepos):
