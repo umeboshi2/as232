@@ -1,7 +1,7 @@
 import os
 import subprocess
 import contextlib
-
+import hashlib
 
 @contextlib.contextmanager
 def working_directory(directory):
