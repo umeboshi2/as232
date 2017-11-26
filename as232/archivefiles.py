@@ -44,8 +44,9 @@ def parse_archive_info(info, archive_type):
     data = dict()
     for att in ARCHIVE_ATTRIBUTES[archive_type]:
         value = getattr(info, att)
-        if type(value) is str:
-            value = str(value, errors='replace')
+        # FIXME shouldn't need this in py3
+        #if type(value) is str:
+        #    value = str(value, errors='replace')
         data[att] = value
     # handle CRC for file
     data['crc'] = info.CRC
