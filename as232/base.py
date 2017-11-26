@@ -22,7 +22,7 @@ def WorkingDirectory(directory):
 def chunks(l, n):
     """ Yield successive n-sized chunks from l.
     """
-    for i in xrange(0, len(l), n):
+    for i in range(0, len(l), n):
         yield l[i:i+n]
 
 def get_sha256sum(fileobj):
@@ -60,7 +60,7 @@ def run_command(cmd):
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     if proc.returncode:
         msg = "%s returned %d" % (' '.join(cmd), proc.returncode)
-        raise RuntimeError, msg
+        raise RuntimeError(msg)
     return proc
 
 def get_command_output(cmd):
