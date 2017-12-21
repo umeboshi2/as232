@@ -1,27 +1,20 @@
-from datetime import datetime, date
-import time
-
-from sqlalchemy import Sequence, Column, ForeignKey
+from sqlalchemy import Column, ForeignKey
 
 # column types
-from sqlalchemy import Integer, String, Unicode
+from sqlalchemy import Integer, Unicode
 from sqlalchemy import UnicodeText
-from sqlalchemy import Boolean, Date, LargeBinary
-from sqlalchemy import PickleType
+from sqlalchemy import Boolean
 from sqlalchemy import Enum
 from sqlalchemy import DateTime
 from sqlalchemy import BigInteger
 
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship
 
-from sqlalchemy.ext.declarative import declarative_base
+from hornstone.alchemy import SerialBase
 
-
-from as232.alchemy import SerialBase, Base
-    
 
 ####################################
-## Data Types                     ##
+#  Data Types                     ##
 ####################################
 
 GitAnnexBackendType = Enum('SHA256', 'SHA256E', 'URL',
@@ -31,25 +24,29 @@ ArchiveType = Enum('zip', 'rar', '7z',
                    name='ga_archive_file_type_enum')
 
 AnnexRepositoryTrustType = Enum('trusted', 'semitrusted', 'untrusted', 'dead',
-                                 name='gitannex_repository_trust_type')
+                                name='gitannex_repository_trust_type')
 
 ####################################
-## Tables                         ##
+#  Tables                         ##
 ####################################
 #
-class AnnexRepository(Base,SerialBase):
+
+
+class AnnexRepository(SerialBase):
     __tablename__ = 'ga_annex_repositories'
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(200))
     uuid = Column(Unicode(40), unique=True)
     trust = Column(AnnexRepositoryTrustType, default='semitrusted')
-    
-class AnnexKey(SerialBase, Base):
+
+
+class AnnexKey(SerialBase):
     __tablename__ = "ga_annex_keys"
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(200), unique=True)
 
-class AnnexFile(SerialBase, Base):
+
+class AnnexFile(SerialBase):
     __tablename__ = "ga_annex_files"
     id = Column(Integer, primary_key=True)
     name = Column(UnicodeText, unique=True)
@@ -63,27 +60,29 @@ class AnnexFile(SerialBase, Base):
     # null mtime is "unknown"
     mtime = Column(DateTime)
     unicode_decode_error = Column(Boolean)
-    
 
-class RepoFile(SerialBase, Base):
+
+class RepoFile(SerialBase):
     __tablename__ = "ga_annex_repo_files"
     file_id = Column(Integer, ForeignKey('ga_annex_files.id'),
                      primary_key=True)
     repo_id = Column(Integer, ForeignKey('ga_annex_repositories.id'),
                      primary_key=True)
-    
-class ArchiveFile(SerialBase, Base):
+
+
+class ArchiveFile(SerialBase):
     __tablename__ = "ga_archive_files"
     id = Column(Integer, ForeignKey('ga_annex_files.id'), primary_key=True)
     archive_type = Column(ArchiveType)
 
-class ArchiveEntryKey(SerialBase, Base):
+
+class ArchiveEntryKey(SerialBase):
     __tablename__ = "ga_archive_entry_keys"
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(200), unique=True)
-    
 
-class ArchiveEntry(SerialBase, Base):
+
+class ArchiveEntry(SerialBase):
     __tablename__ = "ga_archive_entries"
     id = Column(Integer, primary_key=True)
     archive_id = Column(Integer, ForeignKey('ga_archive_files.id'))
@@ -108,7 +107,7 @@ class ArchiveEntry(SerialBase, Base):
     extract_version = Column(Integer)
     header_offset = Column(BigInteger)
     orig_filename = Column(UnicodeText)
-    
+
     # in zip files
     create_system = Column(Integer)
     create_version = Column(Integer)
@@ -117,7 +116,7 @@ class ArchiveEntry(SerialBase, Base):
     flag_bits = Column(Integer)
     internal_attr = Column(Integer)
     reserved = Column(Integer)
-    
+
     # in rar files
     add_size = Column(BigInteger)
     arctime = Column(DateTime)
@@ -136,11 +135,10 @@ class ArchiveEntry(SerialBase, Base):
     salt = Column(UnicodeText)
     type = Column(Integer)
     volume_file = Column(UnicodeText)
-    
 
-    
+
 ####################################
-## Relationships                  ##
+#  Relationships                  ##
 ####################################
 
 AnnexFile.key = relationship(AnnexKey, backref='files')
