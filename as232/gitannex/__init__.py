@@ -15,9 +15,9 @@ from as232.base import WorkingDirectory, working_directory
 from as232.base import get_command_output
 from as232.gitfunc import assert_git_directory
 
-zero_key_old = 'SHA256-s0--e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+zero_key_old = 'SHA256-s0--e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'  # noqa
 
-zero_key_prefix = 'SHA256E-s0--e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+zero_key_prefix = 'SHA256E-s0--e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'  # noqa
 
 def make_key(kdict):
     return '%(method)s-s%(size)d--%(checksum)s' % kdict
