@@ -1,15 +1,23 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.0'
-
 install_requires = [
-    'unipath',
+    'hornstone',
     ]
 
 
+setup_requirements = [
+    'pytest-runner',
+    # TODO(umeboshi2): put setup requirements (distutils extensions, etc.) here
+]
+
+test_requirements = [
+    'pytest',
+    # TODO: put package test requirements here
+]
+
 setup(name='as232',
-      version=version,
+      version='0.1.0',
       description="python code to help manipulate git-annex",
       long_description="""\
 python code to help manipulate git-annex""",
@@ -18,12 +26,15 @@ python code to help manipulate git-annex""",
       author='Joseph Rawson',
       author_email='joseph.rawson.works@gmail.com',
       url='https://github.com/umeboshi2/as232',
-      license='License name',
-      packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+      license='Public Domain',
+      packages=find_packages(include=['as232'],
+                             exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
       install_requires=install_requires,
-      entry_points="""
-      # -*- Entry points: -*-
-      """,
+      entry_points={
+          'console_scripts': [
+              'gadupes = as232.scripts.gadupes:main',
+              ]
+          },
       )

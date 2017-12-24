@@ -76,7 +76,6 @@ def getkey(filepath):
     keystring = get_command_output(cmd).decode().strip()
     return parse_key(keystring)
 
-
 def parse_whereis_topline(topline, filepath):
     whereis_cmd_marker = 'whereis'
     origtop = topline
