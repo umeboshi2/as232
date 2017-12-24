@@ -1,0 +1,3 @@
+[run]
+source = as232
+omit = as232/test*
