@@ -4,10 +4,6 @@
 language: python
 python:
   - 3.5
-  - 3.4
-  - 3.3
-  - 2.7
-  - 2.6
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: pip install -U tox-travis
@@ -20,10 +16,22 @@ script: tox
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
-  user: umeboshi2
+  user: Joseph.Rawson
   password:
-    secure: PLEASE_REPLACE_ME
+    secure: !!binary |
+      S0pvaDV1dHNRdC8wWVdMdzRGN2h6aWxZdHExbTU4dTN4Vyt4NmlvYXl6OERrNzhobGI1L255bGFE
+      MC9Lais2eGJEZ01KS1B5OThndDBzL29SdWRPUExWOE1lcUlEbGUvRkRMRW1RTzluTEEyVWZ4R0h0
+      TFdHUldkSFVibis0U2J1L2YrNU9iQkNkZHFSd0k5YWxXNDBpK1AyUWdZSitlNmhhQ0FXM0FIUklT
+      c2tHMzZWeUFXZWxOUUhPb05YR2h3UmhRR0ZQTjFNQUZmVUtBT3NIOGxWdGREcGUvQmZFMVJHWW1v
+      Z08vaHhBS3FVanlxN2FJYVI2bEtTaGlDaWJsTTFWandJUHV6V09qZlljUmNoZW5GTXR5V1FYNEtN
+      aFJIdUlVRDVlNVJqMHl1NkRQNTlsU0hqVzR3QjF0YUxSR1BFQ0NTOVpVSVRxVVBjMHFLc3VvSlBw
+      M3JQK0NvMFdXS1o4VTBVQkovMzl6aWs5RmxxdmJEOCszd0lNOXJnSmZMVENqV2hzbTl4WDFIUUw2
+      Mm5FendSTHk0dFpyd1BNdy9PT3pidWVVN002d0VscEdrOGhNTER3WWR3ZHV0dldtVzAvSEZRRDVm
+      bnpNSG16SUlEWGxodlk2bnNudkxMbnRVbW1TVVFvbDlJRTVnNzhBMFJucExxaGs3cW5waUpkTnRz
+      YjVCeDZocmg0YlpuenN1eWRGMmJibjlVanBmL09LbFZLa0Qxd3lrcTZ5ZEtmdnZwVFBjcXhuUEpU
+      N2tQTlJYOUFUdWswdk05RzdlWGUzVnphbGliUzNJWmJ1UjRDRnZkaGVyb255cnphOW5qOEU3M3Nk
+      NHZLQ0o4cHVuWUROczFPY25iVW5MMUE2OVpYVkdQNlVFNENjZkg0Mnh0Y3llV2JYQkJsSnpMUTQ9
   on:
+    python: 3.5
     tags: true
     repo: umeboshi2/as232
-    python: 2.7
