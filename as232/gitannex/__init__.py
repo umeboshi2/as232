@@ -7,10 +7,6 @@ import json
 import socket
 
 
-#from useless.base.path import path
-from unipath.path import Path as path
-from unipath import FILES, DIRS, LINKS
-
 from as232.base import WorkingDirectory, working_directory
 from as232.base import get_command_output
 from as232.gitfunc import assert_git_directory
@@ -61,19 +57,25 @@ def parse_key(keystring):
     if split[0] or len(split) != 2:
         raise RuntimeError('bad split %s' % split)
     checksum = split[1]
+    extension = None
+    if method.endswith('E'):
+        extension = '.'.join(checksum.split('.')[1:])
+        checksum = checksum.split('.')[0]
     if size is not None:
         if not size.startswith('s'):
             raise RuntimeError("Bad size %s" % size)
         # strip string and create number for size
         size = int(size[1:])
-    return dict(method=method, size=size, checksum=checksum)
+    return dict(method=method, size=size, checksum=checksum,
+                extension=extension)
 
 def getkey(filepath):
-    if filepath.startswith('/'):
+    if filepath.root:
         raise RuntimeError("Need relative path")
     cmd = ['git-annex', 'lookupkey', str(filepath)]
-    keystring = get_command_output(cmd).strip()
+    keystring = get_command_output(cmd).decode().strip()
     return parse_key(keystring)
+
 
 def parse_whereis_topline(topline, filepath):
     whereis_cmd_marker = 'whereis'
@@ -113,7 +115,8 @@ def make_info_proc(fast=True, output=None):
     cmd = ['git-annex', 'info', '--json']
     if fast:
         cmd.append('--fast')
-    return subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    return subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                            universal_newlines=True)
 
 def annex_info(fast=True):
     proc = make_info_proc(fast=fast)
@@ -126,7 +129,7 @@ def annex_info(fast=True):
 
 def parse_whereis_command_output(output, verbose_warning=False):
     report_data = dict()
-    for line in StringIO(output):
+    for line in StringIO(output.decode()):
         unicode_decode_error = False
         try:
             filedata = json.loads(line.strip())
@@ -146,13 +149,13 @@ def parse_whereis_command_output(output, verbose_warning=False):
 def make_whereis_data(make_pickle=True):
     main_filename = 'whereis.pickle'
     if os.path.isfile(main_filename):
-        return Pickle.load(open(main_filename))
+        return Pickle.load(open(main_filename, 'rb'))
     print("run command")
     cmd = ['git-annex', 'whereis', '--json']
     stdout = subprocess.check_output(cmd)
     print("run command finished")
     report_data = parse_whereis_command_output(stdout)
-    Pickle.dump(report_data, open(main_filename, 'w'))
+    Pickle.dump(report_data, open(main_filename, 'wb'))
     return report_data
 
 
