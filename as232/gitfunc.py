@@ -1,13 +1,12 @@
 import os
 import json
 import subprocess
-
-from unipath.path import Path as path
+from pathlib import Path
 
 
 def assert_git_directory(directory):
-    directory = path(directory)
-    assert directory.isdir()
+    directory = Path(directory)
+    assert directory.is_dir()
     cmd = ['git', '-C', directory, 'rev-parse']
     subprocess.check_call(cmd)
 
@@ -67,3 +66,10 @@ def check_remote_present(directory, name):
     out = subprocess.check_output(cmd)
     os.chdir(oldpwd)
     return json.loads(out)
+
+def git_ls_files_proc(directory="."):
+    assert_git_directory(directory)
+    cmd = ['git', 'ls-files', directory]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    return proc
+
