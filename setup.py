@@ -25,7 +25,7 @@ test_requirements = [
 
 setup(
     name='as232',
-    version='0.1.0',
+    version='0.0.0',
     description="python code to help manipulate git-annex",
     long_description=readme + '\n\n' + history,
     classifiers=[
