@@ -45,13 +45,17 @@ def find_dupes(sizes):
 def handle_directory(dirname, sizes, filelist):
     wd = Path(dirname)
     for path in wd.rglob('*'):
-        if path.is_file() and path.is_symlink():
-            key = path.resolve().name
+        if path.is_dir():
+            continue
+        if path.is_symlink():
+            key = Path(os.readlink(str(path))).name
             data = parse_key(key)
             data['file'] = path
             filelist.append(data)
             sizes[data['size']].append(data)
-
+        else:
+            continue
+            
 def main():
     sizes = defaultdict(list)
     filelist = []
